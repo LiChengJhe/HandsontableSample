@@ -1,37 +1,27 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HotTableRegisterer } from '@handsontable/angular';
 import * as Handsontable from 'handsontable';
 import { GridSettings } from 'handsontable';
 @Component({
+  providers: [HotTableRegisterer],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, OnChanges {
+export class AppComponent implements OnInit {
 
 
   Data: any[] = [];
   TableId = 'TableId';
   TableSettings: GridSettings;
-  constructor(private tableReg: HotTableRegisterer) { }
-
-  ngOnInit() {
+  constructor(private tableReg: HotTableRegisterer) {
 
   }
 
-
-  ngOnChanges(changes: SimpleChanges): void {
-
-
-    const data = changes.Data;
-    if (data) {
-
-      this.Data = [];
-      this.TableSettings = this.GetTableSettings();
-      this.UpdateTable({ data: this.Data });
-
-    }
-
+  ngOnInit() {
+    this.Data = [];
+    this.TableSettings = this.GetTableSettings();
+    this.UpdateTable({ data: this.Data });
   }
 
 
@@ -49,14 +39,17 @@ export class AppComponent implements OnInit, OnChanges {
       allowRemoveColumn: true,
       rowHeaders: true,
       minRows: 5,
-      colHeaders: ['PO_No', 'PN', 'Description', 'Qty', 'Unit'],
-      dataSchema: { PO_No: null, PN: null, Description: null, Qty: null, Unit: null },
+      colHeaders: ['Text', 'Autocomplete', 'Dropdown', 'Checkbox', 'Numeric', 'Password', 'Date', 'Custom'],
+      dataSchema: { Text: null, Autocomplete: null, Dropdown: null, Checkbox: null, Numeric: null, Password: null, Date: null, Custom: null },
       columns: [
-        { data: 'PO_No', type: 'text' },
-        { data: 'PN', type: 'text' },
-        { data: 'Description', type: 'text' },
-        { data: 'Qty', type: 'numeric' },
-        { data: 'Unit', type: 'text' }
+        { data: 'Text', type: 'text' },
+        { data: 'Autocomplete', type: 'autocomplete', source: ['A', 'B', 'C'] },
+        { data: 'Dropdown', type: 'dropdown', source: ['A', 'B', 'C'] },
+        { data: 'Checkbox', type: 'checkbox' },
+        { data: 'Numeric', type: 'numeric' },
+        { data: 'Password', type: 'password' },
+        { data: 'Date', type: 'date' },
+        { data: 'Custom', renderer:this.CustomRenderer },
       ],
       allowEmpty: false,
       manualColumnResize: true,
@@ -67,5 +60,9 @@ export class AppComponent implements OnInit, OnChanges {
       autoRowSize: true,
       stretchH: 'all'
     };
+  }
+  CustomRenderer(instance: any, td: any, row: any, col: any, prop: any, value: any, cellProperties: any){
+      Handsontable.renderers.TextRenderer.apply(this, arguments);
+      td.style.backgroundColor = 'yellow';
   }
 }
