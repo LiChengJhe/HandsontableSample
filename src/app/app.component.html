@@ -1,1 +1,3 @@
 <hot-table  [hotId]="this.TableId" [settings]=" this.TableSettings"></hot-table>
+<input style="width: 100%;margin:10px ;" type="button" (click)="this.ShowData()" value="convert to json" />
+<div style="background-color: yellow">{{this.Data|json}}</div>

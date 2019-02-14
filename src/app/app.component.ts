@@ -9,8 +9,6 @@ import { GridSettings } from 'handsontable';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-
-
   Data: any[] = [];
   TableId = 'TableId';
   TableSettings: GridSettings;
@@ -19,21 +17,16 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.Data = [];
     this.TableSettings = this.GetTableSettings();
-    this.UpdateTable({ data: this.Data });
+  }
+
+  ShowData(): void {
+    this.Data = this.tableReg.getInstance(this.TableId).getData();
   }
 
 
-  UpdateTable(settings: GridSettings): void {
-    const hotTable: Handsontable = this.tableReg.getInstance(this.TableId);
-    if (hotTable) {
-      hotTable.updateSettings(settings, false);
-    }
-  }
   GetTableSettings(): GridSettings {
     return {
-
       contextMenu: true,
       allowInsertColumn: true,
       allowRemoveColumn: true,
@@ -49,7 +42,7 @@ export class AppComponent implements OnInit {
         { data: 'Numeric', type: 'numeric' },
         { data: 'Password', type: 'password' },
         { data: 'Date', type: 'date' },
-        { data: 'Custom', renderer:this.CustomRenderer },
+        { data: 'Custom', renderer: this.CustomRenderer },
       ],
       allowEmpty: false,
       manualColumnResize: true,
@@ -61,8 +54,8 @@ export class AppComponent implements OnInit {
       stretchH: 'all'
     };
   }
-  CustomRenderer(instance: any, td: any, row: any, col: any, prop: any, value: any, cellProperties: any){
-      Handsontable.renderers.TextRenderer.apply(this, arguments);
-      td.style.backgroundColor = 'yellow';
+  CustomRenderer(instance: any, td: any, row: any, col: any, prop: any, value: any, cellProperties: any) {
+    Handsontable.renderers.TextRenderer.apply(this, arguments);
+    td.style.backgroundColor = 'yellow';
   }
 }
