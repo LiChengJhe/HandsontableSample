@@ -10,11 +10,10 @@ import { GridSettings } from 'handsontable';
 export class AppComponent implements OnInit, OnChanges {
 
 
-  FormIsSubmitted = false;
-  POs: any[] = [];
-  PoTableID = 'PoHotTableID';
-  PoTableSettings: GridSettings;
-  constructor(private hotRegisterer: HotTableRegisterer) { }
+  Data: any[] = [];
+  TableId = 'TableId';
+  TableSettings: GridSettings;
+  constructor(private tableReg: HotTableRegisterer) { }
 
   ngOnInit() {
 
@@ -27,22 +26,22 @@ export class AppComponent implements OnInit, OnChanges {
     const data = changes.Data;
     if (data) {
 
-      this.POs = [];
-      this.PoTableSettings = this.GetPoTableInitSettings();
-      this.UpdatePoTable({ data: this.POs });
+      this.Data = [];
+      this.TableSettings = this.GetTableSettings();
+      this.UpdateTable({ data: this.Data });
 
     }
 
   }
 
 
-  UpdatePoTable(settings: GridSettings): void {
-    const hotTable: Handsontable = this.hotRegisterer.getInstance(this.PoTableID);
+  UpdateTable(settings: GridSettings): void {
+    const hotTable: Handsontable = this.tableReg.getInstance(this.TableId);
     if (hotTable) {
       hotTable.updateSettings(settings, false);
     }
   }
-  GetPoTableInitSettings(): GridSettings {
+  GetTableSettings(): GridSettings {
     return {
 
       contextMenu: true,
