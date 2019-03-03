@@ -13,18 +13,13 @@ export class AppComponent implements OnInit {
   TableId = 'TableId';
   TableSettings: GridSettings;
   constructor(private tableReg: HotTableRegisterer) {
-
   }
-
   ngOnInit() {
     this.TableSettings = this.GetTableSettings();
   }
-
   ShowData(): void {
     this.Data = this.tableReg.getInstance(this.TableId).getData();
   }
-
-
   GetTableSettings(): GridSettings {
     return {
       contextMenu: true,
@@ -42,7 +37,7 @@ export class AppComponent implements OnInit {
         { data: 'Numeric', type: 'numeric' },
         { data: 'Password', type: 'password' },
         { data: 'Date', type: 'date' },
-        { data: 'Custom', renderer: this.CustomRenderer },
+        { data: 'Custom', renderer: this.CustomRenderer, validator: this.EmailValidator },
       ],
       allowEmpty: false,
       manualColumnResize: true,
@@ -54,8 +49,17 @@ export class AppComponent implements OnInit {
       stretchH: 'all'
     };
   }
-  CustomRenderer(instance: any, td: any, row: any, col: any, prop: any, value: any, cellProperties: any) {
+  CustomRenderer(instance: any, td: any, row: any, col: any, prop: any, value: any, cellProperties: any): void {
     Handsontable.renderers.TextRenderer.apply(this, arguments);
     td.style.backgroundColor = 'yellow';
+  }
+  EmailValidator(val, callback): void {
+    setTimeout(() => {
+      if (/.+@.+/.test(val)) {
+        callback(true);
+      } else {
+        callback(false);
+      }
+    }, 1000);
   }
 }
